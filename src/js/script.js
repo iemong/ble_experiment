@@ -1,4 +1,4 @@
-const SERVICE_UUID = '19b10000-e8f2-537e-4f6c-d104768a1214';
+const SERVICE_UUID        = '19b10000-e8f2-537e-4f6c-d104768a1214';
 const CHARACTERISTIC_UUID = '19b10001-e8f2-537e-4f6c-d104768a1214';
 
 let ledCharacteristic = null;
@@ -24,9 +24,17 @@ const showLed = () => {
 
 const connectBluetooth = () => {
     navigator.bluetooth.requestDevice({
-        acceptAllDevices: true
+        filters: [
+            {
+                services: [
+                    SERVICE_UUID
+                ]
+            }
+        ]
     }).then(device => {
-        console.log('デバイスを検出しました');
+        console.log('デバイスを選択しました。接続します。');
+        console.log('デバイス名 : ' + device.name);
+        console.log('ID : ' + device.id);
         return device.gatt.connect();
     }).then(server => {
         console.log('サービスに接続中');
@@ -35,12 +43,9 @@ const connectBluetooth = () => {
         console.log('キャラクターを取得');
         return service.getCharacteristic(CHARACTERISTIC_UUID);
     }).then(characteristic => {
-        console.log("接続完了");
+        console.log('接続完了');
         ledCharacteristic = characteristic;
         ledButton.addEventListener('click', () => {
-            showLed();
-        });
-        ledButton.addEventListener('touchend', () => {
             showLed();
         });
     });

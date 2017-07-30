@@ -27,9 +27,13 @@ var showLed = function showLed() {
 
 var connectBluetooth = function connectBluetooth() {
     navigator.bluetooth.requestDevice({
-        acceptAllDevices: true
+        filters: [{
+            services: [SERVICE_UUID]
+        }]
     }).then(function (device) {
-        console.log('デバイスを検出しました');
+        console.log('デバイスを選択しました。接続します。');
+        console.log('デバイス名 : ' + device.name);
+        console.log('ID : ' + device.id);
         return device.gatt.connect();
     }).then(function (server) {
         console.log('サービスに接続中');
@@ -38,12 +42,9 @@ var connectBluetooth = function connectBluetooth() {
         console.log('キャラクターを取得');
         return service.getCharacteristic(CHARACTERISTIC_UUID);
     }).then(function (characteristic) {
-        console.log("接続完了");
+        console.log('接続完了');
         ledCharacteristic = characteristic;
         ledButton.addEventListener('click', function () {
-            showLed();
-        });
-        ledButton.addEventListener('touchend', function () {
             showLed();
         });
     });
