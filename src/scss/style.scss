@@ -1,8 +1,283 @@
 // reset css
 @import 'node_modules/reset.css/reset.css';
 
+// font 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700');
+
 // config
 @import 'variable', 'function', 'mixin', 'keyframes';
 
 // modules
 @import 'module/*';
+
+body {
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(135deg, rgba(24,108,124,1) 0%,rgba(0,0,0,1) 100%);
+    .btn--load {
+        background-image: linear-gradient(0deg, $text_color 0%, $text_color 100%);
+        &::before {
+            border-bottom: $bd_height solid $text_color;
+        }
+        &::after {
+            border-top: $bd_height solid $text_color;
+        } 
+    } 
+    .temperature__text {
+        &::before {
+            border: 1px solid $text_color;
+        }
+    }
+    .temperature__timing {
+        background-color: $text_color;
+    }
+    .temperature__timing--child {
+        border: 1px solid $text_color;
+        animation-duration: 1.0s;
+    }
+    &.is-kowai {
+        $text_color: red;
+        background-image: linear-gradient(135deg, rgba(180, 0 ,0 ,1) 0%,rgba(0,0,0,1) 100%);
+        .btn--load {
+            background-image: linear-gradient(0deg, $text_color 0%, $text_color 100%);
+            &::before {
+                border-bottom: $bd_height solid $text_color;
+            }
+            &::after {
+                border-top: $bd_height solid $text_color;
+            } 
+        } 
+        .temperature__text {
+            &::before {
+                border: 1px solid $text_color;
+            }
+        }
+        .temperature__timing {
+            background-color: $text_color;
+        }
+        .temperature__timing--child {
+            border: 1px solid $text_color;
+            animation-duration: .5s;
+        }
+    }
+}
+.sp-flag {
+    display: none;
+    @include sp-layout {
+        display: block;
+    }
+}
+button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    appearance: none;
+}
+.js-sp-flag {
+    @include pc-layout {
+        display: none;
+    }
+}
+.btn--load {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: $width;
+    height: $height;
+    margin: auto;
+    color: #222;
+    font-size: 22px;
+    font-weight: bold;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s cubic-bezier(.17,.67,.83,.677);
+    &.is-clicked {
+        opacity: 0;
+        pointer-events: none;
+    }
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        border-left: ($width / 2) solid transparent;
+        border-right: ($width / 2) solid transparent; 
+        left: 0;
+    }
+    &::before {
+        content: "";
+        bottom: $height;
+        border-top-color: transparent;
+    }
+    &::after {
+        content: "";
+        top: $height;
+        border-bottom-color: transparent;
+        box-shadow: 0, 5px, 10px
+    }
+}
+
+.temperature {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(.17,.67,.83,.677);
+    &.is-show {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+.temperature__text {
+    position: relative;
+    text-align: center;
+    color: white;
+    &::before {
+        content: "";
+        position: absolute;
+        width: 45vw;
+        height: 45vw;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        @include pc-layout {
+            max-width: 300px;
+            max-height: 300px;
+        }
+    }
+}
+.temperature__value {
+    font-size: 60px;
+}
+.temperature__timing {
+    position: relative;
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+    @include pc-layout {
+        width: 100px;
+        height: 100px;
+        margin-top: 250px;
+    }
+    @include sp-layout {
+        margin-top: 60vw;
+    }
+}
+.temperature__timing--child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20vw;
+    height: 20vw;
+    margin: auto;
+    border-radius: 50%;
+    transform-origin: center center;
+    animation-name: timeKeeper;
+    animation-iteration-count: infinite;
+    @include pc-layout {
+        max-width: 150px;
+        max-height: 150px;
+    }
+}
+#youtube {
+    visibility: hidden;
+    height: 0;
+}
+
+.menu-icon {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 24px;
+    height: 30px;
+    cursor: pointer;
+    &.is-clicked {
+        .menu-icon__inner {
+            background-color: transparent;
+            &::before {
+                top: 0px;
+                transform: rotateZ(45deg);
+            }
+            &::after {
+                bottom: 0px;
+                transform: rotateZ(-45deg);
+            }
+        }
+    }
+}
+.menu-icon__inner {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background-color: $text_color;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: $text_color;
+        transition: transform 1s;
+    }
+    &::before {
+        top: -8px;
+    }
+    &::after {
+        bottom: -8px;
+    }
+}
+.menu-content {
+    pointer-events: none;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    background-color: rgba(0, 0, 0 ,0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1.0s;
+    &.is-clicked {
+        pointer-events: visible;
+        visibility: visible;
+        opacity: 1;
+    }
+}
+.change-temperature {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100px;
+    color: white;
+}
+.change-temperature__top {
+    text-align: center;
+    font-size: 40px;
+    cursor: pointer;
+}
+.change-temperature__value {
+    text-align: center;
+    font-size: 60px;
+}
+.change-temperature__bottom {
+    text-align: center;
+    font-size: 40px;
+    cursor: pointer;
+}

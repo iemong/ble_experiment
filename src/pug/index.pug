@@ -1,12 +1,27 @@
 extends /layout/_default-layout
 
 prepend config-block
-  - page_name = ''
+  - page_name = '温度を管理するぞ〜'
 
 //- append stylesheet-block
 
 //- append javascript-block
 
 block content-block
-  button.is-flash(data-type="led") LED
-  button(data-type="load") 読み込み
+  .sp-flag.js-sp-flag
+  button.is-flash(data-type="led", style="display: none") LED
+  button(data-type="load").btn--load LOAD
+  #youtube
+  .js-after-content.temperature
+    .temperature__text
+      strong.js-temperature-value.temperature__value 00
+      span deg C
+    .temperature__timing
+      .temperature__timing--child
+  .menu-content.js-menu-content
+    .change-temperature
+      .change-temperature__top.js-increment 上
+      .change-temperature__value.js-currentVal 20
+      .change-temperature__bottom.js-decrement 下
+  .menu-icon.js-menu
+    .menu-icon__inner

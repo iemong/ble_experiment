@@ -3,30 +3,48 @@
   <head>
     <meta charset="utf-8">
     <!-- meta-->
-    <title>kayac-html5-starter</title>
+    <title>温度を管理するぞ〜 | kayac-html5-starter</title>
     <meta name="description" content="kayac-html5-starter web page.">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <!-- smartphone meta-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
     <!-- ogp-->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="kayac-html5-starter">
+    <meta property="og:title" content="温度を管理するぞ〜 | kayac-html5-starter">
     <meta property="og:site_name" content="kayac-html5-starter">
     <meta property="og:description" content="kayac-html5-starter web page.">
     <meta property="og:locale" content="ja_JP">
     <!-- twitter card-->
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="kayac-html5-starter">
+    <meta property="twitter:title" content="温度を管理するぞ〜 | kayac-html5-starter">
     <meta property="twitter:description" content="kayac-html5-starter web page.">
     <!-- stylesheet-->
-    <link rel="stylesheet" href="./css/style.css?v=1">
+    <link rel="stylesheet" href="./css/style.css?v=2">
   </head>
   <body>
     <div class="wrapper">
-      <button class="is-flash" data-type="led">LED</button>
-      <button data-type="load">読み込み</button>
+      <div class="sp-flag js-sp-flag"></div>
+      <button class="is-flash" data-type="led" style="display: none;">LED</button>
+      <button class="btn--load" data-type="load">LOAD</button>
+      <div id="youtube"></div>
+      <div class="js-after-content temperature">
+        <div class="temperature__text"><strong class="js-temperature-value temperature__value">00</strong><span>deg C</span></div>
+        <div class="temperature__timing">
+          <div class="temperature__timing--child"></div>
+        </div>
+      </div>
+      <div class="menu-content js-menu-content">
+        <div class="change-temperature">
+          <div class="change-temperature__top js-increment">上</div>
+          <div class="change-temperature__value js-currentVal">20</div>
+          <div class="change-temperature__bottom js-decrement">下</div>
+        </div>
+      </div>
+      <div class="menu-icon js-menu">
+        <div class="menu-icon__inner"></div>
+      </div>
     </div>
     <!-- javascript-->
-    <script src="./js/script.js?v=4"></script>
+    <script src="./js/script.js?v=5"></script>
   </body>
 </html>
