@@ -18,9 +18,15 @@ body {
         background-image: linear-gradient(0deg, $text_color 0%, $text_color 100%);
         &::before {
             border-bottom: $bd_height solid $text_color;
+            @include pc-layout {
+               border-bottom: 90px solid $text_color; 
+            }
         }
         &::after {
             border-top: $bd_height solid $text_color;
+            @include pc-layout {
+               border-top: 90px solid $text_color; 
+            }
         } 
     } 
     .temperature__text {
@@ -95,6 +101,10 @@ button{
     opacity: 1;
     visibility: visible;
     transition: opacity 0.5s cubic-bezier(.17,.67,.83,.677);
+    @include pc-layout {
+        width: 300px;
+        height: 200px;
+    }
     &.is-clicked {
         opacity: 0;
         pointer-events: none;
@@ -106,17 +116,26 @@ button{
         border-left: ($width / 2) solid transparent;
         border-right: ($width / 2) solid transparent; 
         left: 0;
+        @include pc-layout {
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;  
+        }
     }
     &::before {
         content: "";
         bottom: $height;
         border-top-color: transparent;
+        @include pc-layout {
+            bottom: 200px;
+        }
     }
     &::after {
         content: "";
         top: $height;
         border-bottom-color: transparent;
-        box-shadow: 0, 5px, 10px
+        @include pc-layout {
+            top: 200px;
+        }
     }
 }
 

@@ -85,8 +85,14 @@ body {
     background-image: linear-gradient(0deg, #65DBF1 0%, #65DBF1 100%); }
     body .btn--load:before {
       border-bottom: 12vw solid #65DBF1; }
+      @media (min-width: 800px) {
+        body .btn--load:before {
+          border-bottom: 90px solid #65DBF1; } }
     body .btn--load:after {
       border-top: 12vw solid #65DBF1; }
+      @media (min-width: 800px) {
+        body .btn--load:after {
+          border-top: 90px solid #65DBF1; } }
   body .temperature__text:before {
     border: 1px solid #65DBF1; }
   body .temperature__timing {
@@ -148,6 +154,10 @@ button {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   visibility: visible;
   transition: opacity 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.677); }
+  @media (min-width: 800px) {
+    .btn--load {
+      width: 300px;
+      height: 200px; } }
   .btn--load.is-clicked {
     opacity: 0;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
@@ -158,15 +168,24 @@ button {
     border-left: 20vw solid transparent;
     border-right: 20vw solid transparent;
     left: 0; }
+    @media (min-width: 800px) {
+      .btn--load:before, .btn--load:after {
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent; } }
   .btn--load:before {
     content: "";
     bottom: 25vw;
     border-top-color: transparent; }
+    @media (min-width: 800px) {
+      .btn--load:before {
+        bottom: 200px; } }
   .btn--load:after {
     content: "";
     top: 25vw;
-    border-bottom-color: transparent;
-    box-shadow: 0, 5px, 10px; }
+    border-bottom-color: transparent; }
+    @media (min-width: 800px) {
+      .btn--load:after {
+        top: 200px; } }
 
 .temperature {
   display: -webkit-flex;
