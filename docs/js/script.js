@@ -11279,7 +11279,7 @@ var menuContent = document.getElementsByClassName('js-menu-content')[0];
 var upButton = document.getElementsByClassName('js-increment')[0];
 var downButton = document.getElementsByClassName('js-decrement')[0];
 var currentValBox = document.getElementsByClassName('js-currentVal')[0];
-var temperatureLimit = 28;
+var temperatureLimit = 30;
 
 var isHot = false;
 var kowaiMovie = new _kowaiMovie2.default();
