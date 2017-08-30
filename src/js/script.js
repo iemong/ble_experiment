@@ -16,7 +16,7 @@ const menuContent = document.getElementsByClassName('js-menu-content')[0];
 const upButton = document.getElementsByClassName('js-increment')[0];
 const downButton = document.getElementsByClassName('js-decrement')[0];
 const currentValBox = document.getElementsByClassName('js-currentVal')[0];
-let temperatureLimit = 26;
+let temperatureLimit = 28;
 
 let isHot = false;
 const kowaiMovie = new KowaiMovie();
