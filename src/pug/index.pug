@@ -1,27 +1,18 @@
 extends /layout/_default-layout
 
 prepend config-block
-  - page_name = '温度を管理するぞ〜'
+  - page_name = 'BLE'
 
 //- append stylesheet-block
 
-//- append javascript-block
+prepend javascript-block
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.4/howler.min.js")
+  
 
 block content-block
   .sp-flag.js-sp-flag
-  button.is-flash(data-type="led", style="display: none") LED
   button(data-type="load").btn--load LOAD
-  #youtube
-  .js-after-content.temperature
-    .temperature__text
-      strong.js-temperature-value.temperature__value 00
-      span deg C
-    .temperature__timing
-      .temperature__timing--child
-  .menu-content.js-menu-content
-    .change-temperature
-      .change-temperature__top.js-increment 上
-      .change-temperature__value.js-currentVal 20
-      .change-temperature__bottom.js-decrement 下
-  .menu-icon.js-menu
-    .menu-icon__inner
+  .js-after-content.buttons
+    button.js-sound-button1.button 音1
+    button.js-sound-button2.zasyu.button 音2
+    button.js-sound-button3.hoge.button 音3
