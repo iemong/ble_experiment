@@ -1,25 +1,31 @@
-import KowaiMovie from './lib/kowaiMovie';
-import Led from './lib/led';
+import {Howl, Howler} from 'howler';
 
-const SERVICE_UUID        = '19b10000-e8f2-537e-4f6c-d104768a1214';
-const CHARACTERISTIC_UUID = '19b10001-e8f2-537e-4f6c-d104768a1214';
-const THERMOMETER_UUID    = '4fa661d3-66ed-4cd3-99e9-c4f7e3df1d9f';
+let XAxisCharacteristic = null;
+let YAxisCharacteristic = null;
+let ZAxisCharacteristic = null;
+let ax, ay, az;
+const SERVICE_UUID = "a8dd0000-0574-48dd-b570-21b2db19807e";
+const XAXIS_UUID = "a8dd0001-0574-48dd-b570-21b2db19807e";
+const YAXIS_UUID = "a8dd0002-0574-48dd-b570-21b2db19807e";
+const ZAXIS_UUID = "a8dd0003-0574-48dd-b570-21b2db19807e";
 
-let ledCharacteristic = null;
-let thermoCharacteristic = null;
+let recogCharacteristic = null;
 const loadButton = document.querySelector('button[data-type="load"]');
-const graph = document.getElementsByClassName('canvas-graph')[0];
 const afterContent = document.getElementsByClassName('js-after-content')[0];
-const temperatureText = document.getElementsByClassName('js-temperature-value')[0];
-const menuButton = document.getElementsByClassName('js-menu')[0];
-const menuContent = document.getElementsByClassName('js-menu-content')[0];
-const upButton = document.getElementsByClassName('js-increment')[0];
-const downButton = document.getElementsByClassName('js-decrement')[0];
-const currentValBox = document.getElementsByClassName('js-currentVal')[0];
-let temperatureLimit = 30;
+const innerContent = document.getElementsByClassName('js-inner-content')[0];
 
-let isHot = false;
-const kowaiMovie = new KowaiMovie();
+const speech = new webkitSpeechRecognition();
+speech.lang = 'ja';
+
+const sound = new Howl({
+    src: ['sound/stop.wav']
+});
+const yarimasita = new Howl({
+    src: ['sound/yarimasita.wav']
+});
+
+let voiceFlag = false;
+
 const connectBluetooth = () => {
     navigator.bluetooth.requestDevice({
         filters: [
@@ -31,66 +37,79 @@ const connectBluetooth = () => {
         ]
     }).then(device => {
         console.log('デバイスを選択しました。接続します。');
-        console.log('デバイス名 : ' + device.name);
-        console.log('ID : ' + device.id);
+        console.log(`デバイス名 : ${  device.name}`);
+        console.log(`ID : ${  device.id}`);
         return device.gatt.connect();
     }).then(server => {
         console.log('サービスに接続中');
         return server.getPrimaryService(SERVICE_UUID);
     }).then(service => Promise.all([
-        service.getCharacteristic(CHARACTERISTIC_UUID),
-        service.getCharacteristic(THERMOMETER_UUID)
+        service.getCharacteristic(XAXIS_UUID),
+        service.getCharacteristic(YAXIS_UUID),
+        service.getCharacteristic(ZAXIS_UUID),
+        service.getCharacteristic(RECOGNIZE_UUID)
     ])).then(characteristic => {
         console.log('接続完了', characteristic);
-        ledCharacteristic = characteristic[0];
-        thermoCharacteristic = characteristic[1];
-        const led = new Led({
-            ledCharacteristic: ledCharacteristic
-        });
+        XAxisCharacteristic = characteristic[0];
+        YAxisCharacteristic = characteristic[1];
+        ZAxisCharacteristic = characteristic[2];
+
+
+        let prevX = 0;
+        let prevY = 0;
+        let prevZ = 0;
+        let currX = 0;
+        let currY = 0;
+        let currZ = 0;
+        let diffX = 0;
+        let diffY = 0;
+        let diffZ = 0;
+
         
-        led.showLed();
-        let counter = 0;
         setInterval(() => {
-            thermoCharacteristic.readValue().then((value) => {
-                const fixValue = value.getUint8(0);
-                temperatureText.innerHTML = `${fixValue}`;
-                if(fixValue >= temperatureLimit) {
-                    isHot = true;
-                    kowaiMovie.play();
-                } else {
-                    isHot = false;
-                }
+            XAxisCharacteristic.readValue().then((value) => {
+                currX = value.getFloat32(0, true);
+                diffX = Math.abs(currX - prevX);
+                prevX = currX;
             });
-            if(counter !== 0) return;
-            loadButton.classList.add('is-clicked');
-            afterContent.classList.add('is-show');
-            counter +=1;
-        }, 1000);
+            YAxisCharacteristic.readValue().then((value) => {
+                currY = value.getFloat32(0, true);
+                diffY = Math.abs(currY - prevY);
+                prevY = currY;
+            });
+            ZAxisCharacteristic.readValue().then((value) => {
+                currZ = value.getFloat32(0, true);
+                diffZ = Math.abs(currZ - prevZ);
+                prevZ = currZ;
+            });
+            const averageDiff = (diffX + diffY + diffZ) / 3;
+            if(averageDiff > 0.4) {
+                if(!voiceFlag) {
+                    speech.start();
+                    voiceFlag = true;
+                    console.log('start');
+                }
+            }
+        }, 250);
     });
 };
 loadButton.addEventListener('click', () => {
     connectBluetooth();
 });
-loadButton.addEventListener('touchend', () => {
-    connectBluetooth();
-});
-menuButton.addEventListener('click', () => {
-    menuButton.classList.toggle('is-clicked');
-    menuContent.classList.toggle('is-clicked');
-});
 
-let currentVal = 0;
-
-upButton.addEventListener('click', () => {
-    currentVal += 1;
-    currentValBox.innerHTML = currentVal;
-    temperatureLimit = currentVal;
-});
-downButton.addEventListener('click', () => {
-    currentVal -= 1;
-    currentValBox.innerHTML = currentVal;
-    temperatureLimit = currentVal;
-});
-window.addEventListener('load', () => {
-    currentVal = Number.parseInt(currentValBox.innerHTML);
-});
+speech.addEventListener('result', function( e ) {
+    console.log("kekka");
+    
+    const quote = e.results[0][0].transcript;
+    if(quote === 'ウィンガーディアムレビオーサ' ){
+        innerContent.innerHTML='スカート上がる';
+        yarimasita.play();
+        return;
+    }else if(quote === 'ウィンガーディアムレビオサー' ){
+        innerContent.innerHTML='ちがう。あなたのはウィンガーディアムレビオサー';
+        sound.play();
+        return;
+    }else{
+        innerContent.innerHTML=quote;
+    }
+}, false);
